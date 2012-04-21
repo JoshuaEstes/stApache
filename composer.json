@@ -1,7 +1,7 @@
 {
   "name": "JoshuaEstes/stApache",
   "type": "library",
-  "description": "Manage apache settings and vhosts"
+  "description": "Manage apache settings and vhosts",
   "authors": [
     {
       "name": "Joshua Estes"
