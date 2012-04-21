@@ -1,0 +1,21 @@
+{
+  "name": "JoshuaEstes/stApache",
+  "type": "library",
+  "description": "Manage apache settings and vhosts"
+  "authors": [
+    {
+      "name": "Joshua Estes"
+    }
+  ],
+  "dist": {
+    "url": "git@github.com:JoshuaEstes/stApache.git",
+    "type": "git"
+  },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/console": "*",
+        "symfony/process": "*",
+        "JoshuaEstes/ServerTools": "*",
+        "JoshuaEstes/stEtc": "*"
+    }
+}
