@@ -13,8 +13,8 @@
   },
     "require": {
         "php": ">=5.3.2",
-        "symfony/console": "*",
-        "symfony/process": "*",
-        "JoshuaEstes/stEtc": "*"
+        "symfony/console": "master",
+        "symfony/process": "master",
+        "JoshuaEstes/stEtc": "master"
     }
 }
