@@ -104,7 +104,7 @@ EOF;
             $process = new Process('sudo /etc/init.d/apache2 restart');
             break;
           case('Darwin'):
-            $process = new Process('$(which apachectl) -k restart');
+            $process = new Process('sudo $(which apachectl) -k restart');
             break;
         }
         if (isset($process)){
