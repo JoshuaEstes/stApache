@@ -16,21 +16,29 @@ class AddCommand extends Command {
         $this
             ->setName('apache:vhost:add')
             ->setDescription('Create a vhost file')
-            ->addArgument('ServerName', InputArgument::OPTIONAL, 'ServerName (ie: example.local)');
+            ->addArgument('ServerName', InputArgument::OPTIONAL, 'ServerName (ie: example.local)')
+            ->addOption('DocumentRoot', null, InputOption::VALUE_OPTIONAL, 'DocumentRoot (ie: /var/www/website/public_html)')
+            ->addOption('DirectoryIndex', null, InputOption::VALUE_OPTIONAL, 'DirectoryIndex (ie: index.php)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+      // ServerName is required
       if (!$ServerName = $input->getArgument('ServerName')){
         do {
           $ServerName = $this->getDialog()->ask($output, '<question>ServerName (ie example.local)</question> ');
         } while (!$ServerName);
       }
 
-      $DocumentRoot_default = getcwd();
-      $DocumentRoot = $this->getDialog()->ask($output, sprintf('<question>DocumentRoot (default: %s)</question> ',$DocumentRoot_default), $DocumentRoot_default);
+      if (!$DocumentRoot = $input->getOption('DocumentRoot')){
+        $DocumentRoot = $this->getDialog()->ask($output, sprintf('<question>DocumentRoot (default: %s)</question> ',\getcwd()), \getcwd());
+      }
 
-      $DirectoryIndex = $this->getDialog()->ask($output, '<question>DirectoryIndex (default: index.php)</question> ', 'index.php');
+      if (!$DirectoryIndex = $input->getOption('DirectoryIndex')){
+        $DirectoryIndex = $this->getDialog()->ask($output, '<question>DirectoryIndex (default: index.php)</question> ', 'index.php');
+      }
 
+      // Can setup various templates based on PHP_OS or can just use defaults
+      // base on PHP_OS like a base default log directory
       $vhost_template = <<<EOF
 <VirtualHost *:80>
   ServerName %ServerName%
@@ -80,6 +88,7 @@ EOF;
           }
         }
       } else {
+        // User is not using linux so I have no idea where to put this stuff
         $output->writeln(sprintf('<comment>If only you were running Linux I could add the vhost and enable your site.</comment>'));
         $output->writeln(sprintf('<comment>%s != Linux</comment>',PHP_OS));
       }
@@ -101,8 +110,6 @@ EOF;
         unset($process);
         switch(PHP_OS){
           case('Linux'):
-            $process = new Process('sudo /etc/init.d/apache2 restart');
-            break;
           case('Darwin'):
             $process = new Process('sudo $(which apachectl) -k restart');
             break;
